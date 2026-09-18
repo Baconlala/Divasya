@@ -3,12 +3,12 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import { getAllPosts } from "@/lib/data/blog";
+import { getPublishedPosts } from "@/lib/blog";
 
 export const metadata = { title: "Blog" };
 
-export default function BlogIndexPage() {
-  const posts = getAllPosts();
+export default async function BlogIndexPage() {
+  const posts = await getPublishedPosts();
 
   return (
     <>
@@ -48,7 +48,7 @@ export default function BlogIndexPage() {
                     </p>
                     <p className="mt-4 text-xs text-charcoal/60">
                       {post.author} ·{" "}
-                      {new Date(post.date).toLocaleDateString("en-IN", {
+                      {new Date(post.createdAt).toLocaleDateString("en-IN", {
                         day: "numeric",
                         month: "long",
                         year: "numeric",

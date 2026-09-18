@@ -1,5 +1,5 @@
 import { Quote } from "lucide-react";
-import { getAllTestimonials } from "@/lib/data/testimonials";
+import { getAllTestimonials } from "@/lib/testimonials";
 
 function initials(name: string) {
   return name
@@ -10,8 +10,8 @@ function initials(name: string) {
     .toUpperCase();
 }
 
-export default function Testimonials() {
-  const testimonials = getAllTestimonials();
+export default async function Testimonials() {
+  const testimonials = await getAllTestimonials();
 
   return (
     <div className="grid gap-6 sm:grid-cols-3">

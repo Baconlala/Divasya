@@ -3,11 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Container from "@/components/Container";
-import { getAllPosts, getPostBySlug } from "@/lib/data/blog";
-
-export function generateStaticParams() {
-  return getAllPosts().map((p) => ({ slug: p.slug }));
-}
+import { getPostBySlug } from "@/lib/blog";
 
 export async function generateMetadata({
   params,
@@ -15,7 +11,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
   return { title: post ? post.title : "Blog" };
 }
 
@@ -25,8 +21,8 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
-  if (!post) notFound();
+  const post = await getPostBySlug(slug);
+  if (!post || post.status !== "published") notFound();
 
   return (
     <Container className="max-w-3xl py-10 sm:py-14">
@@ -45,7 +41,7 @@ export default async function BlogPostPage({
       </h1>
       <p className="mt-2 text-sm text-charcoal/50">
         {post.author} ·{" "}
-        {new Date(post.date).toLocaleDateString("en-IN", {
+        {new Date(post.createdAt).toLocaleDateString("en-IN", {
           day: "numeric",
           month: "long",
           year: "numeric",

@@ -93,7 +93,7 @@ export async function createCampaign(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/campaigns");
-  redirect("/admin");
+  redirect("/admin/campaigns?saved=1");
 }
 
 export async function updateCampaign(id: string, formData: FormData) {
@@ -125,7 +125,7 @@ export async function updateCampaign(id: string, formData: FormData) {
   revalidatePath("/");
   revalidatePath("/campaigns");
   revalidatePath(`/campaigns/${fields.slug}`);
-  redirect("/admin");
+  redirect("/admin/campaigns?saved=1");
 }
 
 export async function deleteCampaign(id: string) {

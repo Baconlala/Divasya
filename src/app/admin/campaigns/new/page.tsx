@@ -7,7 +7,7 @@ export default function NewCampaignPage() {
   return (
     <div>
       <Link
-        href="/admin"
+        href="/admin/campaigns"
         className="inline-flex items-center gap-1.5 text-sm font-semibold text-terracotta hover:text-terracotta-dark"
       >
         <ArrowLeft size={16} /> Back to Campaigns

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import Logo from "@/components/Logo";
+import AdminNav from "@/components/admin/AdminNav";
 import { signOut } from "@/app/admin/actions";
 
 export const metadata = { title: "Admin", robots: { index: false, follow: false } };
@@ -14,9 +15,10 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   } = await supabase.auth.getUser();
 
   return (
-    <div className="min-h-screen bg-sand/40">
+    <div className="flex min-h-screen flex-col bg-sand/40">
       <header className="border-b border-sand bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+        <div className="h-1 w-full bg-linear-to-r from-terracotta via-gold to-maroon" />
+        <div className="flex items-center justify-between px-4 py-3 sm:px-6">
           <Link href="/admin" className="flex items-center gap-2.5">
             <Logo size={32} />
             <span className="font-display text-lg font-bold text-maroon">Divasya Admin</span>
@@ -38,7 +40,12 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">{children}</main>
+      <div className="flex flex-1">
+        {user && <AdminNav />}
+        <main className="flex-1 px-4 py-8 sm:px-8">
+          <div className="mx-auto max-w-5xl">{children}</div>
+        </main>
+      </div>
     </div>
   );
 }

@@ -39,6 +39,13 @@ export const CAMPAIGN_STATUS_LABELS: Record<CampaignStatus, string> = {
   paused: "Paused",
 };
 
+export type PostStatus = "draft" | "published";
+
+export const POST_STATUS_LABELS: Record<PostStatus, string> = {
+  draft: "Draft",
+  published: "Published",
+};
+
 export interface BlogPost {
   id: string;
   slug: string;
@@ -47,8 +54,9 @@ export interface BlogPost {
   content: string[];
   coverImage: string;
   author: string;
-  date: string;
   category: string;
+  status: PostStatus;
+  createdAt: string;
 }
 
 export interface GalleryItem {
@@ -56,8 +64,9 @@ export interface GalleryItem {
   title: string;
   category: CampaignType;
   image: string;
-  beforeImage?: string;
+  beforeImage: string | null;
   caption: string;
+  createdAt: string;
 }
 
 export interface Testimonial {
@@ -65,4 +74,24 @@ export interface Testimonial {
   name: string;
   location: string;
   quote: string;
+  createdAt: string;
+}
+
+export interface SiteSettings {
+  statRaised: string;
+  statTemples: string;
+  statDonors: string;
+  statFundsPercent: string;
+}
+
+export type MessageStatus = "new" | "read";
+
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  status: MessageStatus;
+  createdAt: string;
 }

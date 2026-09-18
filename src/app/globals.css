@@ -43,12 +43,46 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-color: var(--color-terracotta-light) var(--color-cream);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--color-terracotta);
+  color: var(--color-cream);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+}
+
+/* Webkit (Chrome/Safari/Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-terracotta-light);
+  border-radius: 999px;
+  border: 3px solid var(--color-cream);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-terracotta);
+}
+
+/* Pill-shaped CTAs (buttons and button-styled links) get a tactile press. */
+.rounded-full:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease-out;
 }
 
 h1,

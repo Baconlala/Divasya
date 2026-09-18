@@ -1,14 +1,19 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { deleteCampaign } from "@/app/admin/actions";
 
-export default function DeleteCampaignButton({ id, title }: { id: string; title: string }) {
+export default function ConfirmDeleteButton({
+  action,
+  confirmLabel,
+}: {
+  action: () => Promise<void>;
+  confirmLabel: string;
+}) {
   return (
     <form
-      action={deleteCampaign.bind(null, id)}
+      action={action}
       onSubmit={(e) => {
-        if (!confirm(`Delete "${title}"? This cannot be undone.`)) {
+        if (!confirm(`${confirmLabel} This cannot be undone.`)) {
           e.preventDefault();
         }
       }}

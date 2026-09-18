@@ -5,6 +5,7 @@ import { MapPin, Users } from "lucide-react";
 import Container from "@/components/Container";
 import ProgressBar from "@/components/ProgressBar";
 import DonateWidget from "@/components/DonateWidget";
+import MobileStickyDonate from "@/components/MobileStickyDonate";
 import Reveal from "@/components/Reveal";
 import { getCampaignBySlug } from "@/lib/campaigns";
 import { formatINR, progressPercent } from "@/lib/format";
@@ -55,10 +56,10 @@ export default async function CampaignDetailPage({
         </Container>
       </section>
 
-      <Container className="grid gap-10 py-12 lg:grid-cols-[1fr_360px] sm:py-16">
+      <Container className="grid gap-10 py-12 pb-24 lg:grid-cols-[1fr_360px] lg:pb-16 sm:py-16">
         <div>
           {/* Mobile: donate widget appears right after hero for quick access */}
-          <div className="mb-8 lg:hidden">
+          <div id="mobile-donate-widget" className="mb-8 scroll-mt-24 lg:hidden">
             <DonateWidget slug={campaign.slug} />
           </div>
 
@@ -132,6 +133,8 @@ export default async function CampaignDetailPage({
           </div>
         </aside>
       </Container>
+
+      <MobileStickyDonate targetId="mobile-donate-widget" campaignTitle={campaign.title} />
     </>
   );
 }

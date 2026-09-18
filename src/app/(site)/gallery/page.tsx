@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import { getGalleryByCategory } from "@/lib/data/gallery";
+import { getGalleryByCategory } from "@/lib/gallery";
 import { CAMPAIGN_TYPE_LABELS, CampaignType } from "@/lib/types";
 
 const FILTERS: { value: "all" | CampaignType; label: string }[] = [
@@ -25,7 +25,7 @@ export default async function GalleryPage({
   const { category } = await searchParams;
   const activeCategory =
     category && FILTERS.some((f) => f.value === category) ? category : "all";
-  const items = getGalleryByCategory(activeCategory);
+  const items = await getGalleryByCategory(activeCategory);
 
   return (
     <>
