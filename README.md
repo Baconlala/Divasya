@@ -107,3 +107,4 @@ complete to click through. Real Razorpay checkout comes in Phase 3.
 2. **Phase 3** — Razorpay one-time checkout, wired to the database.
 3. **Phase 4** — Razorpay subscriptions + webhooks for recurring donations.
 4. **Phase 5** — go-live checklist, swap test keys for live keys.
+
