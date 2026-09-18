@@ -1,0 +1,22 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6E1423" />
+      <stop offset="1" stop-color="#4A0D18" />
+    </linearGradient>
+    <linearGradient id="flame" x1="16" y1="3" x2="16" y2="19" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E6C874" />
+      <stop offset="1" stop-color="#C9962C" />
+    </linearGradient>
+  </defs>
+  <circle cx="16" cy="16" r="16" fill="url(#bg)" />
+  <path
+    d="M16 3C16 3 11.5 8.6 11.5 13.1C11.5 15.86 13.4 18 16 18C18.6 18 20.5 15.86 20.5 13.1C20.5 8.6 16 3 16 3Z"
+    fill="url(#flame)"
+  />
+  <path
+    d="M6 22.5C6 22.5 9 20 16 20C23 20 26 22.5 26 22.5C26 25.54 21.75 28 16 28C10.25 28 6 25.54 6 22.5Z"
+    fill="#C9962C"
+    fill-opacity="0.9"
+  />
+</svg>

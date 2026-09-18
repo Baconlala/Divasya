@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Divasya
 
-## Getting Started
+Campaign-based donation platform for temple restoration, sadhu seva, gurukul
+education, and animal welfare causes.
 
-First, run the development server:
+**Status: Phase 2 — Supabase-backed campaigns + admin panel.** Campaigns now
+live in a real database and are managed from `/admin`. Donations are still a
+UI-only preview (no payments yet — that's Phase 3). Blog and gallery content
+are still static placeholders in `src/lib/data/`.
+
+**The site will not run until you connect a Supabase project** — see setup
+below. Images are still curated stock photos from Unsplash; swap them for
+real photos whenever you have them.
+
+## One-time Supabase setup
+
+1. Create a free project at [supabase.com](https://supabase.com).
+2. In the Supabase dashboard, open the **SQL Editor** and run
+   [`supabase/schema.sql`](./supabase/schema.sql), then
+   [`supabase/seed.sql`](./supabase/seed.sql). This creates the `campaigns`
+   table (plus `donations`/`subscriptions`, unused until Phase 3/4) and seeds
+   it with the same 8 placeholder campaigns the site already had.
+3. Go to **Authentication → Providers** and turn **off** "Allow new users to
+   sign up". This site has exactly one kind of account — the admin — and
+   nobody should be able to create one but you.
+4. Go to **Authentication → Users → Add user** and create your own admin
+   login (an email + a password you choose). That's the account you'll use
+   to sign in at `/admin`. There is no separate signup page by design.
+5. Go to **Project Settings → API** and copy the **Project URL** and the
+   **anon public key**.
+
+## Local environment
+
+Copy `.env.example` to `.env.local` and fill in the two Supabase values from
+step 5 above:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+npm install
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000) for the public site, and
+[http://localhost:3000/admin](http://localhost:3000/admin) to log in and
+manage campaigns.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploying (Vercel)
 
-## Learn More
+Add the same two variables from `.env.local` to the project in **Vercel →
+Settings → Environment Variables**, then redeploy. Until they're set, every
+page that reads campaigns (home, `/campaigns`, `/admin`, etc.) will show a
+server error — that's expected, not a bug.
 
-To learn more about Next.js, take a look at the following resources:
+If you're deploying by running `vercel` from your terminal each time, ask to
+set up GitHub + Vercel's Git integration instead so every change deploys
+automatically on push — no manual `vercel` command needed.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What's here
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `src/app/(site)/` — the public site: home, campaigns listing + detail, a
+  donation flow preview, gallery, blog, about, contact, privacy, terms.
+- `src/app/admin/` — the admin panel: login, campaign list, create/edit
+  forms. Protected by `src/proxy.ts`, which redirects signed-out visitors to
+  `/admin/login`.
+- `src/lib/campaigns.ts` — all campaign reads, backed by Supabase. Row Level
+  Security (defined in `supabase/schema.sql`) is what actually enforces that
+  anonymous visitors only ever see `status = 'live'` campaigns — the app
+  code doesn't need to re-check that itself.
+- `src/app/admin/actions.ts` — Server Actions for create/update/delete,
+  including image upload to Supabase Storage.
+- `src/lib/data/` — blog posts, gallery items, and testimonials. Still
+  static placeholder content; not part of this migration.
 
-## Deploy on Vercel
+## Who can do what
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Donors** never need an account. Name and email are collected per-donation
+  once Phase 3 lands — same as the current UI preview.
+- **The admin** (you) is the only login on the whole site. There's no
+  separate `admin_users`/roles table — with public signup disabled, "signed
+  in" and "admin" mean the same thing. If you ever want a second admin, add
+  them from Supabase's dashboard the same way you added yourself.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Known limitations at this stage
+
+- Deleting a campaign in `/admin` does not delete its images from Supabase
+  Storage — they're just orphaned (free tier is 1GB, so this is a non-issue
+  until the site has real scale).
+- `raised_amount` and `donor_count` are manually edited in the admin form for
+  now. Once Phase 3/4 wires up real donations, these should be computed from
+  the `donations`/`subscriptions` tables instead.
+
+## About the donation flow
+
+`/donate/[slug]` and `/donate/thank-you` are a clickable **preview** of the
+donation UI only — amount selection, a one-time/monthly toggle, a donor
+details form, and a confirmation page. Submitting the form does not charge
+anyone or store anything; it just simulates the flow so the site feels
+complete to click through. Real Razorpay checkout comes in Phase 3.
+
+## Next steps (per the build plan)
+
+1. ~~**Phase 2** — Supabase for real campaign data + an admin panel to manage
+   campaigns.~~ Done.
+2. **Phase 3** — Razorpay one-time checkout, wired to the database.
+3. **Phase 4** — Razorpay subscriptions + webhooks for recurring donations.
+4. **Phase 5** — go-live checklist, swap test keys for live keys.
